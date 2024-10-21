@@ -13,21 +13,22 @@ func main() {
 	router := gin.Default()
 
 	router.Use(middleware.RedisMiddleware())
+	storage := router.Group("/storage")
+	{
+		// 인증 관련 엔드포인트
+		storage.GET("auth", handler.GetAuthSession)
 
-	// 인증 관련 엔드포인트
-	router.GET("auth", handler.GetAuthSession)
+		// 파일박스 관련 엔드포인트
+		storage.POST(":box", middleware.AuthGuard(), handler.CreateBox)
+		storage.PATCH(":box", middleware.AuthGuard(), handler.UpdateBoxMetadata)
+		storage.DELETE(":box", middleware.AuthGuard(), handler.DeleteBox)
+		storage.GET(":box", middleware.AuthGuard(), handler.ListFilesInBox)
 
-	// 파일박스 관련 엔드포인트
-	router.POST("storage/:box", middleware.AuthGuard(), handler.CreateBox)
-	router.PATCH("storage/:box", middleware.AuthGuard(), handler.UpdateBoxMetadata)
-	router.DELETE("storage/:box", middleware.AuthGuard(), handler.DeleteBox)
-	router.GET("storage/:box", middleware.AuthGuard(), handler.ListFilesInBox)
-
-	// 파일 관련 엔드포인트
-	router.PUT("storage/:box/:file", middleware.AuthGuard(), handler.UploadFile)
-	router.PATCH("storage/:box/:file", middleware.AuthGuard(), handler.UpdateFileMetadata)
-	router.GET("storage/:box/:file", handler.DownloadFile)
-	router.DELETE("storage/:box/:file", middleware.AuthGuard(), handler.DeleteFile)
-
+		// 파일 관련 엔드포인트
+		storage.PUT(":box/:file", middleware.AuthGuard(), handler.UploadFile)
+		storage.PATCH(":box/:file", middleware.AuthGuard(), handler.UpdateFileMetadata)
+		storage.GET(":box/:file", handler.DownloadFile)
+		storage.DELETE(":box/:file", middleware.AuthGuard(), handler.DeleteFile)
+	}
 	router.Run(":3002")
 }
