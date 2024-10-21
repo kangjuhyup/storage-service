@@ -56,8 +56,6 @@ jobs:
       run: |
         echo "$SSH_PRIVATE_KEY" > private_key
         chmod 600 private_key
-        echo "ORACLE_IP: $ORACLE_IP"
-        echo "SSH_PRIVATE_KEY: $SSH_PRIVATE_KEY"
         ssh -o StrictHostKeyChecking=no -i private_key ubuntu@$ORACLE_IP << 'EOF'
           docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
           docker pull ghcr.io/${{ github.repository }}/storage:latest
