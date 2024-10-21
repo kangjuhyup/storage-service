@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 	"github.com/kangjuhyup/storage-service/config"
 	"github.com/kangjuhyup/storage-service/util"
-	"github.com/redis/go-redis/v9"
 )
 
 var ctx = context.Background()

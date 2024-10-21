@@ -45,7 +45,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y sshpass
 
-#TODO: pm2 를 이용해 무중단 배포
     - name: deploy
       env:
         ORACLE_IP: ${{ secrets.ORACLE_INSTANCE_IP }}
