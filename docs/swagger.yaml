@@ -1,0 +1,9 @@
+basePath: /storage
+host: localhost:3002
+info:
+  contact: {}
+  description: This is a storage service API.
+  title: Storage Service API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

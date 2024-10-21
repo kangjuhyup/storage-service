@@ -5,14 +5,25 @@ import (
 	"github.com/kangjuhyup/storage-service/config"
 	"github.com/kangjuhyup/storage-service/core/handler"
 	"github.com/kangjuhyup/storage-service/core/middleware"
+	_ "github.com/kangjuhyup/storage-service/docs"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func main() {
+// @title Storage Service API
+// @version 1.0
+// @description This is a storage service API.
+// @host localhost:3002
+// @BasePath /storage
 
+func main() {
 	config.InitConfig()
 	router := gin.Default()
 
 	router.Use(middleware.RedisMiddleware())
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	storage := router.Group("/storage")
 	{
 		// 인증 관련 엔드포인트
@@ -30,5 +41,6 @@ func main() {
 		storage.GET(":box/:file", handler.DownloadFile)
 		storage.DELETE(":box/:file", middleware.AuthGuard(), handler.DeleteFile)
 	}
+
 	router.Run(":3002")
 }
