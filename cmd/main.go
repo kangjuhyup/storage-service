@@ -22,10 +22,10 @@ func main() {
 
 	router.Use(middleware.RedisMiddleware())
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	storage := router.Group("/storage")
 	{
+		storage.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 		// 인증 관련 엔드포인트
 		storage.GET("auth", handler.GetAuthSession)
 
